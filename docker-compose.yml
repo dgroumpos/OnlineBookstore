@@ -48,10 +48,60 @@ services:
     networks:
       - elastic
 
+  catalog-db:
+    image: postgres:15
+    container_name: catalog-db
+    environment:
+      POSTGRES_USER: catalog_user
+      POSTGRES_PASSWORD: catalog_password
+      POSTGRES_DB: catalog_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - catalog-db-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  order-db:
+    image: postgres:15
+    container_name: order-db
+    environment:
+      POSTGRES_USER: order_user
+      POSTGRES_PASSWORD: order_password
+      POSTGRES_DB: order_db
+    ports:
+      - "5434:5432"
+    volumes:
+      - order-db-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  user-db:
+    image: postgres:15
+    container_name: user-db
+    environment:
+      POSTGRES_USER: user_user
+      POSTGRES_PASSWORD: user_password
+      POSTGRES_DB: user_db
+    ports:
+      - "5435:5432"
+    volumes:
+      - user-db-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
 volumes:
   elasticsearch-data:
+    driver: local
+  catalog-db-data:
+    driver: local
+  order-db-data:
+    driver: local
+  user-db-data:
     driver: local
 
 networks:
   elastic:
+    driver: bridge
+  app-network:
     driver: bridge
